@@ -27,6 +27,8 @@ open class StatusBarNotificationBanner: BaseNotificationBanner {
         get {
             if let customBannerHeight = customBannerHeight {
                 return customBannerHeight
+            } else if shouldAdjustForDynamicIsland() {
+                return 70.0
             } else if shouldAdjustForNotchFeaturedIphone() {
                 return 50.0
             } else {
@@ -58,16 +60,20 @@ open class StatusBarNotificationBanner: BaseNotificationBanner {
         updateMarqueeLabelsDurations()
     }
 
-    public convenience init(title: String,
-                            style: BannerStyle = .info,
-                            colors: BannerColorsProtocol? = nil) {
+    public convenience init(
+        title: String,
+        style: BannerStyle = .info,
+        colors: BannerColorsProtocol? = nil
+    ) {
         self.init(style: style, colors: colors)
         titleLabel!.text = title
     }
 
-    public convenience init(attributedTitle: NSAttributedString,
-                            style: BannerStyle = .info,
-                            colors: BannerColorsProtocol? = nil) {
+    public convenience init(
+        attributedTitle: NSAttributedString,
+        style: BannerStyle = .info,
+        colors: BannerColorsProtocol? = nil
+    ) {
         self.init(style: style, colors: colors)
         titleLabel!.attributedText = attributedTitle
     }
@@ -92,8 +98,10 @@ open class StatusBarNotificationBanner: BaseNotificationBanner {
 
 public extension StatusBarNotificationBanner {
     
-    func applyStyling(titleColor: UIColor? = nil,
-                      titleTextAlign: NSTextAlignment? = nil) {
+    func applyStyling(
+        titleColor: UIColor? = nil,
+        titleTextAlign: NSTextAlignment? = nil
+    ) {
         
         if let titleColor = titleColor {
             titleLabel!.textColor = titleColor

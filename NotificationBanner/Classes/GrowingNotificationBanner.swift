@@ -60,9 +60,20 @@ open class GrowingNotificationBanner: BaseNotificationBanner {
                 let subtitleHeight = ceil(subtitleLabel?.sizeThatFits(
                     CGSize(width: boundingWidth,
                            height: .greatestFiniteMagnitude)).height ?? 0.0)
-                
-                let topOffset: CGFloat = shouldAdjustForNotchFeaturedIphone() ? 44.0 : verticalSpacing
-                let minHeight: CGFloat = shouldAdjustForNotchFeaturedIphone() ? 88.0 : 64.0
+             
+                let topOffset: CGFloat
+                let minHeight: CGFloat
+
+                if shouldAdjustForNotchFeaturedIphone() {
+                    topOffset = 44.0
+                    minHeight = 88.0
+                } else if shouldAdjustForDynamicIsland() {
+                    topOffset = 44.0
+                    minHeight = 104.0
+                } else {
+                    topOffset = verticalSpacing
+                    minHeight = 64.0
+                }
                 
                 var actualBannerHeight = topOffset + titleHeight + subtitleHeight + verticalSpacing
                 
@@ -84,7 +95,7 @@ open class GrowingNotificationBanner: BaseNotificationBanner {
     private let innerSpacing: CGFloat = 2.5
     
     /// The bottom most label of the notification if a subtitle is provided
-    public private(set) var subtitleLabel: UILabel?
+    public internal(set) var subtitleLabel: UILabel?
     
     /// The view that is presented on the left side of the notification
     private var leftView: UIView?
@@ -101,14 +112,16 @@ open class GrowingNotificationBanner: BaseNotificationBanner {
     /// Font used for the subtitle label
     internal var subtitleFont: UIFont = UIFont.systemFont(ofSize: 15.0)
     
-    public init(title: String? = nil,
-                subtitle: String? = nil,
-                leftView: UIView? = nil,
-                rightView: UIView? = nil,
-                style: BannerStyle = .info,
-                colors: BannerColorsProtocol? = nil,
-                iconPosition: IconPosition = .center,
-                sideViewSize: CGFloat = 24.0) {
+    public init(
+        title: String? = nil,
+        subtitle: String? = nil,
+        leftView: UIView? = nil,
+        rightView: UIView? = nil,
+        style: BannerStyle = .info,
+        colors: BannerColorsProtocol? = nil,
+        iconPosition: IconPosition = .center,
+        sideViewSize: CGFloat = 24.0
+    ) {
         
         self.leftView = leftView
         self.rightView = rightView
@@ -189,13 +202,15 @@ open class GrowingNotificationBanner: BaseNotificationBanner {
 
 public extension GrowingNotificationBanner {
     
-    func applyStyling(cornerRadius: CGFloat? = nil,
-                      titleFont: UIFont? = nil,
-                      titleColor: UIColor? = nil,
-                      titleTextAlign: NSTextAlignment? = nil,
-                      subtitleFont: UIFont? = nil,
-                      subtitleColor: UIColor? = nil,
-                      subtitleTextAlign: NSTextAlignment? = nil) {
+    func applyStyling(
+        cornerRadius: CGFloat? = nil,
+        titleFont: UIFont? = nil,
+        titleColor: UIColor? = nil,
+        titleTextAlign: NSTextAlignment? = nil,
+        subtitleFont: UIFont? = nil,
+        subtitleColor: UIColor? = nil,
+        subtitleTextAlign: NSTextAlignment? = nil
+    ) {
         
         if let cornerRadius = cornerRadius {
             contentView.layer.cornerRadius = cornerRadius
